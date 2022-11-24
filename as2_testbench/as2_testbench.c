@@ -233,11 +233,11 @@ int main(int argc, char **argv) {
       }
     }
     // select
-    //        printf("Entering select()\n");
+    // printf("Entering select()\n");
     struct timeval timeout = {1, 0};  // 1 second wait
     res = select(maxfd + 1, &set, NULL, NULL, &timeout);
-    //        printf("select() returned: %d\n",res);
-    // check client responses
+    // printf("select() returned: %d\n", res);
+    //  check client responses
     for (i = 0; i < maxclients; i++) {
       struct session *c = &clients[i];
       if (FD_ISSET(c->fdin, &set)) {
