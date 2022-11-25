@@ -27,7 +27,7 @@ typedef struct Queue {
   char** q;
 } Queue;
 
-struct Queue createQueue();
+struct Queue createQueue(int number);
 
 char* peek(struct Queue queue);
 

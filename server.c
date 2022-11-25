@@ -29,12 +29,29 @@ struct account {
 
 struct for_thread {
   struct Queue* q;
-  int* bal;
+  int pipe;
+};
+
+struct for_master {
+  int pipe1, pipe2, pipe3, pipe4;
 };
 
 struct account** accounts;
 
-int interact_with_client(int input, int output) {
+int query = 0;
+int cont = 0;
+
+void master_query(int* bal, int fd) {
+  if (query) {
+    char* out = calloc(sizeof(char), 100);
+    sprintf(out, "%d", *bal);
+    write(fd, out, 100);
+    free(out);
+    while (cont == 0) usleep(1000);
+  }
+}
+
+int interact_with_client(int input, int output, int* bal) {
   int quit = 0;
   char* buf = malloc(BUFSIZE);
   if (buf == NULL) {
@@ -75,6 +92,7 @@ int interact_with_client(int input, int output) {
             if (accno < ACC_CAPACITY && accno >= 0) {
               pthread_rwlock_wrlock(&accounts[accno]->lock);
               if (accounts[accno]->balance >= amount) {
+                *bal -= amount;
                 accounts[accno]->balance -= amount;
                 char* out = calloc(sizeof(char), BUFSIZE);
                 sprintf(out,
@@ -147,6 +165,7 @@ int interact_with_client(int input, int output) {
           if (sscanf(buf, "d %d %d", &accno, &amount) == 2) {
             if (accno < ACC_CAPACITY && accno >= 0) {
               pthread_rwlock_wrlock(&accounts[accno]->lock);
+              *bal += amount;
               accounts[accno]->balance += amount;
               char* out = calloc(sizeof(char), BUFSIZE);
               sprintf(out, "Deposited %d to account %d, new balance %d", amount,
@@ -171,7 +190,7 @@ int interact_with_client(int input, int output) {
   return 0;
 }
 
-int establish_client_conn(const char* path) {
+int establish_client_conn(const char* path, int* bal) {
   char* path_in;
   char* path_out;
   int output, input;
@@ -189,7 +208,7 @@ int establish_client_conn(const char* path) {
   }
 
   if (write(output, "ready\n", 8)) {
-    if (interact_with_client(input, output) < 0) {
+    if (interact_with_client(input, output, bal) < 0) {
       goto err_exit;
     }
   } else {
@@ -210,16 +229,18 @@ err_exit:
 void* init_thread(void* vargp) {
   struct for_thread* my_inf = (struct for_thread*)vargp;
   struct Queue* queue = my_inf->q;
-  int* my_bal = my_inf->bal;
+  int my_bal = 0;
+  int* bal_pointer = &my_bal;
+  int fd = my_inf->pipe;
   char* paths;
-  pthread_t mytid = pthread_self();
 
   for (;;) {
     if ((paths = removeData(queue)) != NULL) {
       printf("got path %s from queue, queue.front is %d\n", paths,
              queue->front);
-      establish_client_conn(paths);
+      establish_client_conn(paths, bal_pointer);
     }
+    master_query(bal_pointer, fd);
     // printf("no client in queue\n");
     sleep(1);
   }
@@ -241,18 +262,44 @@ void enqueue(char* path, struct Queue** queues) {
   }
 }
 
+void* master_thread(void* vargp) {
+  char buf1[100], buf2[100], buf3[100], buf4[100];
+  char* buf = calloc(sizeof(char), BUFSIZE);
+
+  struct for_master* fm = (struct for_master*)vargp;
+  for (;;) {
+    if (fgets(buf, BUFSIZE, stdin) == NULL) break;
+    switch (buf[0]) {
+      case 'l':
+        cont = 0;
+        query = 1;
+        read(fm->pipe1, buf1, 100);
+        read(fm->pipe2, buf2, 100);
+        read(fm->pipe3, buf3, 100);
+        read(fm->pipe4, buf4, 100);
+
+        printf("Balances\nDesk 1: %s\nDesk 2: %s\nDesk 3: %s\nDesk 4: %s\n",
+               buf1, buf2, buf3, buf4);
+
+        query = 0;
+        cont = 1;
+    }
+  }
+  return (void*)0;
+}
 int main(int argc, char** argv) {
   const char* fname = "runfile";
   FILE* runfile = fopen(fname, "w");
   char* buf = malloc(BUFSIZE);
   pid_t pid = getpid();
-  int bal1, bal2, bal3, bal4;
+
+  int pipe1[2], pipe2[2], pipe3[3], pipe4[4];
 
   struct client recv_client;
-  struct Queue q1 = createQueue();
-  struct Queue q2 = createQueue();
-  struct Queue q3 = createQueue();
-  struct Queue q4 = createQueue();
+  struct Queue q1 = createQueue(1);
+  struct Queue q2 = createQueue(2);
+  struct Queue q3 = createQueue(3);
+  struct Queue q4 = createQueue(4);
 
   struct Queue** queues = malloc(sizeof(struct Queue*) * QUEUESIZE);
 
@@ -269,7 +316,7 @@ int main(int argc, char** argv) {
   queues[2] = &q3;
   queues[3] = &q4;
 
-  pthread_t tid1, tid2, tid3, tid4;
+  pthread_t tid1, tid2, tid3, tid4, mtid;
 
   key_t key;
   int msgid;
@@ -283,10 +330,19 @@ int main(int argc, char** argv) {
 
   fclose(runfile);
 
-  struct for_thread ft1 = {queues[0], &bal1};
-  struct for_thread ft2 = {queues[1], &bal2};
-  struct for_thread ft3 = {queues[2], &bal3};
-  struct for_thread ft4 = {queues[3], &bal4};
+  pipe(pipe1);
+  pipe(pipe2);
+  pipe(pipe3);
+  pipe(pipe4);
+
+  struct for_thread ft1 = {queues[0], pipe1[1]};
+  struct for_thread ft2 = {queues[1], pipe2[1]};
+  struct for_thread ft3 = {queues[2], pipe3[1]};
+  struct for_thread ft4 = {queues[3], pipe4[1]};
+
+  struct for_master fm = {pipe1[0], pipe2[0], pipe3[0], pipe4[0]};
+
+  pthread_create(&mtid, NULL, master_thread, (void*)&fm);
 
   pthread_create(&tid1, NULL, init_thread, (void*)(&ft1));
   pthread_create(&tid2, NULL, init_thread, (void*)(&ft2));
