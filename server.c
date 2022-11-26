@@ -1,3 +1,14 @@
+/**
+ * @file server.c
+ * @author David Enberg
+ * @brief Implementation of a multithreaded bank server
+ * @version 1.0
+ * @date 2022-11-26
+ *
+ * @copyright Copyright (c) 2022
+ *
+ */
+
 #include <errno.h>
 #include <fcntl.h>
 #include <pthread.h>
@@ -17,45 +28,72 @@
 
 #define ACC_CAPACITY 1000
 
+/*Macro to check that memory was allocated properly*/
 #define CHECK_ALLOC(ptr)     \
   if ((ptr) == NULL) {       \
     perror("Malloc failed"); \
     exit(EXIT_FAILURE);      \
   }
 
+/*Struct that is received when client is trying to connect*/
 struct client {
   long int message_type;
   char mtext[100];
 };
 
+/*Account struct as used by the server*/
 struct account {
   int accnumber;
   int balance;
   pthread_rwlock_t lock;
 } account;
 
+/*Struct as used for storing accounts*/
 struct account_storage {
   int accnumber;
   int balance;
 } account_storage;
 
+/*Struct for passing data to desk threads*/
 struct for_thread {
   struct Queue* q;
   int pipe;
 };
 
+/*Struct for passing data to master thread*/
 struct for_master {
   int pipe1, pipe2, pipe3, pipe4;
 };
 
+/*Global array of our accounts, data integrity protected by
+RW locks.*/
 struct account** accounts;
 
+/*Some necessary global variables*/
 int query = 0;
 int cont = 0;
 int shutdown = 0;
+/*Pipes for our signal handler so it know that
+the desk threads were properly shut down*/
 int desk1, desk2, desk3, desk4;
+FILE* logfile;
 
+/*Log an event to a file, includes timestamp*/
+void log_event(FILE* log, char* msg) {
+  char buf[20];
+  struct tm* t;
+
+  time_t now = time(0);
+  t = localtime(&now);
+
+  strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", t);
+  fprintf(log, "%s Server: %s \n", buf, msg);
+}
+
+/*Signal handler for SIGINT, set global shutdown variable to 1
+and checks that the desk threads were properly shut down*/
 void sig_int(int signum) {
+  log_event(logfile, "shutting down");
   printf("Caught signal SIGINT, shutting down\n");
   char buf[100];
   shutdown = 1;
@@ -69,6 +107,7 @@ void sig_int(int signum) {
   printf("Desk 4 shutdown\n");
 }
 
+/*Function use by desk threads to query balance of desks*/
 void master_query(int* bal, int fd) {
   if (query) {
     char* out = calloc(sizeof(char), 100);
@@ -80,23 +119,25 @@ void master_query(int* bal, int fd) {
   }
 }
 
+/*Function that parses client input and responds*/
 int interact_with_client(int input, int output, int* bal) {
   int quit = 0;
   char* buf = malloc(BUFSIZE);
   CHECK_ALLOC(buf);
-  if (buf == NULL) {
-    return -1;
-  }
+  log_event(logfile,
+            "Established connection with client, starting interaction");
   while (!quit) {
+    /*Read input from client and respond accordingly*/
     if (read(input, buf, BUFSIZE)) {
       switch (buf[0]) {
         case 'q':
-          printf("processing command 'q'\n");
+          log_event(logfile, "Processing command 'q'");
           quit = 1;
-          printf("done with client\n");
+          log_event(logfile, "Done with client");
+          printf("Done with client\n");
           break;
         case 'l': {
-          printf("processing command 'l'\n");
+          log_event(logfile, "Processing command 'l'");
           int accno = -1;
           if (sscanf(buf, "l %d", &accno) == 1) {
             if (accno < ACC_CAPACITY && accno >= 0) {
@@ -116,7 +157,7 @@ int interact_with_client(int input, int output, int* bal) {
           break;
         }
         case 'w': {
-          printf("processing command 'w'\n");
+          log_event(logfile, "Processing command 'w'");
           int accno = -1;
           int amount = 0;
           if (sscanf(buf, "w %d %d", &accno, &amount) == 2) {
@@ -154,7 +195,7 @@ int interact_with_client(int input, int output, int* bal) {
           int accno1 = -1;
           int accno2 = -1;
           int amount = 0;
-          printf("processing command 't'\n");
+          log_event(logfile, "Processing command 't'");
           if (sscanf(buf, "t %d %d %d", &accno1, &accno2, &amount) == 3) {
             if (accno1 >= 0 && accno1 < ACC_CAPACITY && accno2 >= 0 &&
                 accno2 < ACC_CAPACITY && (accno1 != accno2)) {
@@ -194,7 +235,7 @@ int interact_with_client(int input, int output, int* bal) {
         }
 
         case 'd': {
-          printf("processing command 'd'\n");
+          log_event(logfile, "Processing command 'd'");
           int accno = -1;
           int amount = 0;
           if (sscanf(buf, "d %d %d", &accno, &amount) == 2) {
@@ -227,6 +268,7 @@ int interact_with_client(int input, int output, int* bal) {
   return 0;
 }
 
+/*Function that establishes connection with a new client*/
 int establish_client_conn(const char* path, int* bal) {
   char* path_in;
   char* path_out;
@@ -244,12 +286,13 @@ int establish_client_conn(const char* path, int* bal) {
     goto err_exit;
   }
 
+  /*Tell client that interaction is ready to begin*/
   if (write(output, "ready\n", 8)) {
     if (interact_with_client(input, output, bal) < 0) {
       goto err_exit;
     }
   } else {
-    printf("error in writing to client \n");
+    log_event(logfile, "Error in writing to client");
     goto err_exit;
   }
   close(output);
@@ -257,12 +300,13 @@ int establish_client_conn(const char* path, int* bal) {
   return 0;
 
 err_exit:
-  printf("at err exit\n");
+  log_event(logfile, "Could not establish contact with client");
   close(output);
   close(input);
   return -1;
 }
 
+/*Initialize a desk thread*/
 void* init_thread(void* vargp) {
   struct for_thread* my_inf = (struct for_thread*)vargp;
   struct Queue* queue = my_inf->q;
@@ -272,23 +316,29 @@ void* init_thread(void* vargp) {
   char* paths;
 
   for (;;) {
+    /*Check if we have received a new client in our queue*/
     if ((paths = removeData(queue)) != NULL) {
-      printf("got path %s from queue, queue.front is %d\n", paths,
-             queue->front);
+      log_event(logfile,
+                "Got path from queue, attempting to establish connection");
+      /*Establish connection with the new client*/
+      printf("Starting communication with new client\n");
       establish_client_conn(paths, bal_pointer);
     }
+    /*Check if we should query our balance*/
     master_query(bal_pointer, fd);
     if (shutdown) {
+      /*Tell master thread we are shutting down*/
       write(fd, "Shutdown", BUFSIZE);
       break;
     }
-    // printf("no client in queue\n");
+
     sleep(1);
   }
   pthread_detach(pthread_self());
   return (void*)0;
 }
 
+/*Adds a new path to the shortest queue*/
 void enqueue(char* path, struct Queue** queues) {
   int shortest = 100;
   int shortest_idx = 0;
@@ -298,14 +348,16 @@ void enqueue(char* path, struct Queue** queues) {
       shortest_idx = i;
     }
   }
-  printf("inserting path into queue %d\n", shortest_idx);
+  log_event(logfile, "Inserting new client into queue");
   if (!insert(queues[shortest_idx], path)) {
-    printf("could not insert path\n");
+    log_event(logfile, "Could not insert client");
   }
 }
 
+/*Cleanup function for master thread*/
 void cleanup(void* arg) { free((char*)arg); }
 
+/*Master thread that queries desk balance*/
 void* master_thread(void* vargp) {
   char buf1[100], buf2[100], buf3[100], buf4[100];
   char* buf = calloc(sizeof(char), BUFSIZE);
@@ -348,6 +400,7 @@ void* master_thread(void* vargp) {
 int main(int argc, char** argv) {
   const char* fname = "runfile";
   const char* acc_file = "accounts";
+  logfile = fopen("server_log", "a");
   FILE* accfile;
   FILE* runfile = fopen(fname, "w");
   char* buf = malloc(BUFSIZE);
@@ -359,10 +412,12 @@ int main(int argc, char** argv) {
   int pipe1[2], pipe2[2], pipe3[3], pipe4[4];
 
   struct client recv_client;
-  struct Queue q1 = createQueue(1);
-  struct Queue q2 = createQueue(2);
-  struct Queue q3 = createQueue(3);
-  struct Queue q4 = createQueue(4);
+
+  /*Init queues*/
+  struct Queue q1 = createQueue();
+  struct Queue q2 = createQueue();
+  struct Queue q3 = createQueue();
+  struct Queue q4 = createQueue();
 
   struct Queue** queues = malloc(sizeof(struct Queue*) * QUEUESIZE);
   CHECK_ALLOC(queues);
@@ -370,6 +425,7 @@ int main(int argc, char** argv) {
   accounts = malloc(sizeof(struct account*) * ACC_CAPACITY);
   CHECK_ALLOC(accounts);
 
+  /*Allocate memory and init rw locks*/
   for (int i = 0; i < ACC_CAPACITY; i++) {
     accounts[i] = malloc(sizeof(struct account));
     CHECK_ALLOC(accounts[i]);
@@ -377,7 +433,8 @@ int main(int argc, char** argv) {
     accounts[i]->balance = 0;
     pthread_rwlock_init(&accounts[i]->lock, NULL);
   }
-
+  /*Try to read in previous account data*/
+  log_event(logfile, "Opening storage of accounts");
   if ((accfile = fopen(acc_file, "r")) != NULL) {
     for (int i = 0; i < ACC_CAPACITY; i++) {
       fread(acc_input, sizeof(struct account_storage), 1, accfile);
@@ -386,7 +443,7 @@ int main(int argc, char** argv) {
     }
     fclose(accfile);
   } else
-    printf("Could not open storage of accounts\n");
+    log_event(logfile, "Could not open storage of accounts");
 
   free(acc_input);
 
@@ -399,7 +456,7 @@ int main(int argc, char** argv) {
 
   key_t key;
   int msgid;
-
+  /*Create a mesage queue and print its id to runfile*/
   key = ftok("progfile", 65);
 
   msgid = msgget(key, 0666 | IPC_CREAT);
@@ -409,46 +466,60 @@ int main(int argc, char** argv) {
 
   fclose(runfile);
 
+  /*Init pipes for ipc between master thread and desk threads*/
   pipe(pipe1);
   pipe(pipe2);
   pipe(pipe3);
   pipe(pipe4);
 
+  /*Struct for passing queue and pipe to desk threads*/
   struct for_thread ft1 = {queues[0], pipe1[1]};
   struct for_thread ft2 = {queues[1], pipe2[1]};
   struct for_thread ft3 = {queues[2], pipe3[1]};
   struct for_thread ft4 = {queues[3], pipe4[1]};
 
+  /*Struct for passing the desk pipes to master thread*/
   struct for_master fm = {pipe1[0], pipe2[0], pipe3[0], pipe4[0]};
-
+  log_event(logfile, "Creating threads");
+  /*Init threads*/
   pthread_create(&mtid, NULL, master_thread, (void*)&fm);
 
   pthread_create(&tid1, NULL, init_thread, (void*)(&ft1));
   pthread_create(&tid2, NULL, init_thread, (void*)(&ft2));
   pthread_create(&tid3, NULL, init_thread, (void*)(&ft3));
   pthread_create(&tid4, NULL, init_thread, (void*)(&ft4));
-
+  log_event(logfile, "Threads created");
+  /*Start signal handler*/
   signal(SIGINT, sig_int);
 
+  printf("Server has been started\n");
   for (;;) {
+    /*Check the message queue for new clients trying to connect*/
     if (msgrcv(msgid, &recv_client, sizeof(recv_client.mtext), 1, IPC_NOWAIT) ==
         -1) {
       if (errno != ENOMSG) {
-        printf("something went wrong when receiving message\n");
+        log_event(logfile, "Something went wrong when receiving message\n");
       }
     } else {
+      printf("Received new connection request\n");
       strcpy(buf, recv_client.mtext);
       enqueue(buf, queues);
       errno = 0;
     }
     if (shutdown) {
+      /*The shutdown variable has been set so kill the master thread, other
+      threads handle the signal on their own*/
       pthread_cancel(mtid);
       pthread_detach(mtid);
       break;
     }
+    /*Delay as we use non blocking msgrcv to not send an unecessary amount of
+     *request*/
     usleep(1000);
   }
   free(buf);
+  /*We dont write the locks to storage, only account numbers and balance so
+   init different struct for storage*/
   struct account_storage** acc_storage;
   acc_storage = malloc(sizeof(struct account_storage) * ACC_CAPACITY);
   CHECK_ALLOC(acc_storage);
@@ -462,6 +533,7 @@ int main(int argc, char** argv) {
     acc_storage[i]->balance = accounts[i]->balance;
   }
 
+  /*Try to write account data to file*/
   accfile = fopen(acc_file, "w");
   if (accfile == NULL) printf("could not open accfile\n");
   for (int i = 0; i < ACC_CAPACITY; i++) {

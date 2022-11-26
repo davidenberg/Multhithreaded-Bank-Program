@@ -19,13 +19,21 @@ struct client {
 
 int input, output;
 
+/*Signal handler to tell the server we are exiting*/
 void sig_int(int signum) {
   printf("\nCaught signal SIGINT, disconnecting...\n");
   write(output, "q", BUFSIZE);
   printf("Disconnected\n");
   exit(0);
 }
-
+/**
+ * @brief Connects to server by passing 2 named pipes via a message queue
+ *
+ * @param fname file that contains msgqid
+ * @param input the variable which will store our input side of the named pipe
+ * @param output the variable which will store our output side of the named pip
+ * @return int
+ */
 int connect_to_server(const char* fname, int* input, int* output) {
   FILE* runfile;
   int msgqid = -1;
@@ -36,6 +44,7 @@ int connect_to_server(const char* fname, int* input, int* output) {
   char path_out[50];
   char to_child[100];
   char* buf = malloc(BUFSIZE);
+  /*Use pid to guarantee unique name for named pipe*/
   sprintf(path_in, "/tmp/fifoin%d", pid);
   sprintf(path_out, "/tmp/fifoout%d", pid);
   mkfifo(path_in, 0666);
@@ -53,6 +62,7 @@ int connect_to_server(const char* fname, int* input, int* output) {
   fscanf(runfile, "%d", &msgqid);
   fclose(runfile);
 
+  /*Send the named pipes to server*/
   if (msgsnd(msgqid, &c, sizeof(c.mtext), 0) < 0) {
     free(buf);
     return -1;
@@ -61,7 +71,7 @@ int connect_to_server(const char* fname, int* input, int* output) {
   *input = open(path_in, O_RDONLY);
   *output = open(path_out, O_WRONLY);
   if (*input < 0 || *output < 0) return -1;
-
+  /*Block until we get write from server*/
   int n = read(*input, buf, 49);
   if (n >= 0 && !strcmp(buf, "ready\n")) {
     free(buf);
@@ -74,6 +84,10 @@ int connect_to_server(const char* fname, int* input, int* output) {
 int main(int argc, char** argv) {
   setvbuf(stdin, NULL, _IOLBF, 0);
   setvbuf(stdout, NULL, _IOLBF, 0);
+  /*This file with fname is an indication if the
+  server is running, also contains the msgqueueid
+  that is use to pass the named pipe that will
+  be used for ipc with the server*/
   const char* fname = "runfile";
   int msgqid;
 
@@ -82,9 +96,13 @@ int main(int argc, char** argv) {
     int quit = 0;
 
     if ((msgqid = connect_to_server(fname, &input, &output)) >= 0) {
+      /*Connect to server uses blocking function call read() which means
+      that we won't enter before server is ready to communicate*/
       printf("ready\n");
+      /*Init signal handler*/
       signal(SIGINT, sig_int);
       while (!quit) {
+        /*Parse commands and communicate with server*/
         if (fgets(buf, BUFSIZE, stdin) == NULL) break;
         switch (buf[0]) {
           case 'q':
@@ -145,6 +163,7 @@ int main(int argc, char** argv) {
     close(input);
     close(output);
   } else {
+    /*The runfile does not exists -> server is not running*/
     printf("server is not running\n");
   }
   return 0;

@@ -1,6 +1,6 @@
 #include "queue.h"
 
-struct Queue createQueue(int number) {
+struct Queue createQueue() {
   struct Queue queue;
   queue.q = (char**)malloc(SIZE * sizeof(char*));
   for (int i = 0; i < SIZE; i++) {

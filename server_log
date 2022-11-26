@@ -1,0 +1,37 @@
+2022-11-26 15:45:43 Server: Opening storage of accounts 
+2022-11-26 15:45:43 Server: Creating threads 
+2022-11-26 15:45:43 Server: Threads created 
+2022-11-26 15:45:47 Server: Inserting new client into queue 
+2022-11-26 15:45:48 Server: Got path from queue, attempting to establish connection 
+2022-11-26 15:45:51 Server: Processing command 't' 
+2022-11-26 15:45:52 Server: Processing command 'q' 
+2022-11-26 15:45:52 Server: Done with client 
+2022-11-26 15:45:55 Server: shutting down 
+2022-11-26 15:47:09 Server: Opening storage of accounts 
+2022-11-26 15:47:09 Server: Creating threads 
+2022-11-26 15:47:09 Server: Threads created 
+2022-11-26 15:47:12 Server: shutting down 
+2022-11-26 16:36:59 Server: Opening storage of accounts 
+2022-11-26 16:36:59 Server: Creating threads 
+2022-11-26 16:36:59 Server: Threads created 
+2022-11-26 16:37:03 Server: Inserting new client into queue 
+2022-11-26 16:37:03 Server: Got path from queue, attempting to establish connection 
+2022-11-26 16:37:03 Server: Established connection with client, starting interaction 
+2022-11-26 16:37:04 Server: Processing command 'l' 
+2022-11-26 16:37:08 Server: Processing command 'w' 
+2022-11-26 16:37:09 Server: Processing command 'q' 
+2022-11-26 16:37:09 Server: Done with client 
+2022-11-26 16:37:12 Server: shutting down 
+2022-11-26 17:03:22 Server: Opening storage of accounts 
+2022-11-26 17:03:22 Server: Creating threads 
+2022-11-26 17:03:22 Server: Threads created 
+2022-11-26 17:03:25 Server: shutting down 
+2022-11-26 17:05:49 Server: Opening storage of accounts 
+2022-11-26 17:05:49 Server: Creating threads 
+2022-11-26 17:05:49 Server: Threads created 
+2022-11-26 17:05:53 Server: Inserting new client into queue 
+2022-11-26 17:05:54 Server: Got path from queue, attempting to establish connection 
+2022-11-26 17:05:54 Server: Established connection with client, starting interaction 
+2022-11-26 17:05:59 Server: Processing command 'q' 
+2022-11-26 17:05:59 Server: Done with client 
+2022-11-26 17:06:04 Server: shutting down 
