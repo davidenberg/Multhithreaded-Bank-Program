@@ -1,5 +1,6 @@
 #include <errno.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,6 +16,15 @@ struct client {
   long int message_type;
   char mtext[100];
 };
+
+int input, output;
+
+void sig_int(int signum) {
+  printf("\nCaught signal SIGINT, disconnecting...\n");
+  write(output, "q", BUFSIZE);
+  printf("Disconnected\n");
+  exit(0);
+}
 
 int connect_to_server(const char* fname, int* input, int* output) {
   FILE* runfile;
@@ -44,7 +54,8 @@ int connect_to_server(const char* fname, int* input, int* output) {
   fclose(runfile);
 
   if (msgsnd(msgqid, &c, sizeof(c.mtext), 0) < 0) {
-    printf("erro in msgsnd() %s\n", strerror(errno));
+    free(buf);
+    return -1;
   }
 
   *input = open(path_in, O_RDONLY);
@@ -56,6 +67,7 @@ int connect_to_server(const char* fname, int* input, int* output) {
     free(buf);
     return msgqid;
   }
+  free(buf);
   return -1;
 }
 
@@ -66,13 +78,12 @@ int main(int argc, char** argv) {
   int msgqid;
 
   if (access(fname, F_OK) == 0) {
-    int input, output;
     char* buf = calloc(sizeof(char), BUFSIZE);
     int quit = 0;
 
     if ((msgqid = connect_to_server(fname, &input, &output)) >= 0) {
       printf("ready\n");
-
+      signal(SIGINT, sig_int);
       while (!quit) {
         if (fgets(buf, BUFSIZE, stdin) == NULL) break;
         switch (buf[0]) {
