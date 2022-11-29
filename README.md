@@ -1,10 +1,10 @@
 # Sovellusohjelmointi assignment 2
 
-##Installation
+## Installation
 
 Run the supplied makefile with "make install" to create two binaries, server and connection.
 
-##Usage
+## Usage
 
 Begin by starting the server. This will initialize the bank account service and allow you to connect
 using the "connection" binaries. Up to four clients can be serviced at once, others will be placed in
