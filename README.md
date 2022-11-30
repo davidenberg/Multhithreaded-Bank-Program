@@ -9,7 +9,7 @@ connection.
 
 Begin by starting the server. This will initialize the bank account service and
 allow you to connect using the "connection" binaries. Up to four clients can be
-serviced at once, others will be placed in a queue while wating for their turn.
+serviced at once, others will be placed in a queue while waiting for their turn.
 The following commands are accepted:
 
 “l 1”: give balance of account 1 “w 1 123”: withdraw 123 euros from account 1 “t
