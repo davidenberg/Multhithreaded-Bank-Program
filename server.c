@@ -395,6 +395,9 @@ void* master_thread(void* vargp) {
           query = 0;
           cont = 1;
         }
+        case 'q': {
+          kill(getpid(), SIGINT);
+        }
         default:
           break;
       }

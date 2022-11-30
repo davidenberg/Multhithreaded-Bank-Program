@@ -1,0 +1,15 @@
+{
+  "headers": {
+    "cache-control": "max-age=86400",
+    "vary": "Accept-Encoding",
+    "content-type": "application/vnd.deno.reg.v2+json",
+    "date": "Wed, 30 Nov 2022 14:51:07 GMT",
+    "content-length": "1618",
+    "server": "deno/europe-north1-c"
+  },
+  "url": "https://deno.land/.well-known/deno-import-intellisense.json",
+  "now": {
+    "secs_since_epoch": 1669819867,
+    "nanos_since_epoch": 970735157
+  }
+}
