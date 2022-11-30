@@ -1,0 +1,142 @@
+2022-11-30 15:34:39 Server: Opening storage of accounts 
+2022-11-30 15:34:39 Server: Could not open storage of accounts 
+2022-11-30 15:34:39 Server: Creating threads 
+2022-11-30 15:34:39 Server: Threads created 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:53 Server: Inserting new client into queue 
+2022-11-30 15:34:54 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:54 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'q' 
+2022-11-30 15:34:54 Server: Done with client 
+2022-11-30 15:34:54 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:54 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:54 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:54 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:54 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:54 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 't' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 't' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 't' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'q' 
+2022-11-30 15:34:54 Server: Done with client 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 't' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 't' 
+2022-11-30 15:34:54 Server: Processing command 't' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'q' 
+2022-11-30 15:34:54 Server: Done with client 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'd' 
+2022-11-30 15:34:54 Server: Processing command 'w' 
+2022-11-30 15:34:54 Server: Processing command 'l' 
+2022-11-30 15:34:54 Server: Processing command 'q' 
+2022-11-30 15:34:54 Server: Done with client 
+2022-11-30 15:34:55 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:55 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'w' 
+2022-11-30 15:34:55 Server: Processing command 'q' 
+2022-11-30 15:34:55 Server: Done with client 
+2022-11-30 15:34:55 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:55 Server: Inserting new client into queue 
+2022-11-30 15:34:55 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:55 Server: Processing command 't' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:55 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'q' 
+2022-11-30 15:34:55 Server: Done with client 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:55 Server: Processing command 'w' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 't' 
+2022-11-30 15:34:55 Server: Processing command 'w' 
+2022-11-30 15:34:55 Server: Processing command 'w' 
+2022-11-30 15:34:55 Server: Inserting new client into queue 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 't' 
+2022-11-30 15:34:55 Server: Processing command 't' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'q' 
+2022-11-30 15:34:55 Server: Done with client 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 't' 
+2022-11-30 15:34:55 Server: Processing command 't' 
+2022-11-30 15:34:55 Server: Processing command 'd' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'w' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'l' 
+2022-11-30 15:34:55 Server: Processing command 'q' 
+2022-11-30 15:34:55 Server: Done with client 
+2022-11-30 15:34:55 Server: Inserting new client into queue 
+2022-11-30 15:34:56 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:56 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:56 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:56 Server: Processing command 't' 
+2022-11-30 15:34:56 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:56 Server: Processing command 'q' 
+2022-11-30 15:34:56 Server: Done with client 
+2022-11-30 15:34:56 Server: Processing command 'q' 
+2022-11-30 15:34:56 Server: Done with client 
+2022-11-30 15:34:56 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:34:56 Server: Inserting new client into queue 
+2022-11-30 15:34:56 Server: Established connection with client, starting interaction 
+2022-11-30 15:34:56 Server: Processing command 'l' 
+2022-11-30 15:34:56 Server: Processing command 'l' 
+2022-11-30 15:34:56 Server: Processing command 't' 
+2022-11-30 15:34:56 Server: Processing command 'q' 
+2022-11-30 15:34:56 Server: Done with client 
+2022-11-30 15:34:56 Server: Got path from queue, attempting

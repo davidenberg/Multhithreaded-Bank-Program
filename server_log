@@ -35,3 +35,89 @@
 2022-11-26 17:05:59 Server: Processing command 'q' 
 2022-11-26 17:05:59 Server: Done with client 
 2022-11-26 17:06:04 Server: shutting down 
+2022-11-26 20:12:52 Server: Opening storage of accounts 
+2022-11-26 20:12:52 Server: Creating threads 
+2022-11-26 20:12:52 Server: Threads created 
+2022-11-26 20:12:53 Server: shutting down 
+2022-11-27 12:16:30 Server: Opening storage of accounts 
+2022-11-27 12:16:30 Server: Creating threads 
+2022-11-27 12:16:30 Server: Threads created 
+2022-11-27 12:18:13 Server: Inserting new client into queue 
+2022-11-27 12:18:14 Server: Got path from queue, attempting to establish connection 
+2022-11-27 12:18:14 Server: Established connection with client, starting interaction 
+2022-11-27 12:18:14 Server: Inserting new client into queue 
+2022-11-27 12:19:18 Server: Inserting new client into queue 
+2022-11-27 12:19:19 Server: Got path from queue, attempting to establish connection 
+2022-11-27 12:19:19 Server: Established connection with client, starting interaction 
+2022-11-27 12:19:38 Server: Processing command 'l' 
+2022-11-27 12:19:43 Server: Processing command 'l' 
+2022-11-27 12:19:49 Server: Processing command 'd' 
+2022-11-27 12:19:53 Server: Processing command 'l' 
+2022-11-27 12:19:55 Server: Processing command 'l' 
+2022-11-27 12:20:05 Server: Processing command 'q' 
+2022-11-27 12:20:05 Server: Done with client 
+2022-11-27 12:20:06 Server: Processing command 'q' 
+2022-11-27 12:20:06 Server: Done with client 
+2022-11-27 12:20:07 Server: Got path from queue, attempting to establish connection 
+2022-11-27 12:20:07 Server: Established connection with client, starting interaction 
+2022-11-27 12:20:12 Server: Processing command 'q' 
+2022-11-27 12:20:12 Server: Done with client 
+2022-11-27 12:20:15 Server: shutting down 
+2022-11-30 15:28:39 Server: Opening storage of accounts 
+2022-11-30 15:28:39 Server: Creating threads 
+2022-11-30 15:28:39 Server: Threads created 
+2022-11-30 15:28:41 Server: shutting down 
+2022-11-30 15:28:08 Server: Opening storage of accounts 
+2022-11-30 15:28:08 Server: Creating threads 
+2022-11-30 15:28:08 Server: Threads created 
+2022-11-30 15:28:16 Server: Inserting new client into queue 
+2022-11-30 15:28:17 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:28:17 Server: Established connection with client, starting interaction 
+2022-11-30 15:28:21 Server: Inserting new client into queue 
+2022-11-30 15:28:22 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:28:22 Server: Established connection with client, starting interaction 
+2022-11-30 15:28:46 Server: Processing command 'q' 
+2022-11-30 15:28:46 Server: Done with client 
+2022-11-30 15:28:48 Server: Processing command 'q' 
+2022-11-30 15:28:48 Server: Done with client 
+2022-11-30 15:28:49 Server: shutting down 
+2022-11-30 15:32:23 Server: Opening storage of accounts 
+2022-11-30 15:32:23 Server: Creating threads 
+2022-11-30 15:32:23 Server: Threads created 
+2022-11-30 15:32:31 Server: Inserting new client into queue 
+2022-11-30 15:32:32 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:32:32 Server: Established connection with client, starting interaction 
+2022-11-30 15:32:35 Server: Inserting new client into queue 
+2022-11-30 15:32:35 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:32:35 Server: Established connection with client, starting interaction 
+2022-11-30 15:32:37 Server: Processing command 'q' 
+2022-11-30 15:32:37 Server: Done with client 
+2022-11-30 15:32:42 Server: Inserting new client into queue 
+2022-11-30 15:32:42 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:32:42 Server: Established connection with client, starting interaction 
+2022-11-30 15:32:49 Server: Processing command 'q' 
+2022-11-30 15:32:49 Server: Done with client 
+2022-11-30 15:32:50 Server: Processing command 'q' 
+2022-11-30 15:32:50 Server: Done with client 
+2022-11-30 15:32:56 Server: shutting down 
+2022-11-30 15:33:15 Server: Opening storage of accounts 
+2022-11-30 15:33:15 Server: Creating threads 
+2022-11-30 15:33:15 Server: Threads created 
+2022-11-30 15:33:22 Server: Inserting new client into queue 
+2022-11-30 15:33:22 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:33:22 Server: Established connection with client, starting interaction 
+2022-11-30 15:33:31 Server: Inserting new client into queue 
+2022-11-30 15:33:32 Server: Got path from queue, attempting to establish connection 
+2022-11-30 15:33:32 Server: Established connection with client, starting interaction 
+2022-11-30 15:33:36 Server: Processing command 'l' 
+2022-11-30 15:33:38 Server: Processing command 'l' 
+2022-11-30 15:33:49 Server: Processing command 'd' 
+2022-11-30 15:33:58 Server: Processing command 'l' 
+2022-11-30 15:34:01 Server: Processing command 't' 
+2022-11-30 15:34:04 Server: Processing command 'l' 
+2022-11-30 15:34:06 Server: Processing command 'l' 
+2022-11-30 15:34:06 Server: Processing command 'q' 
+2022-11-30 15:34:06 Server: Done with client 
+2022-11-30 15:34:08 Server: Processing command 'q' 
+2022-11-30 15:34:08 Server: Done with client 
+2022-11-30 15:34:16 Server: shutting down 

@@ -346,6 +346,14 @@ void enqueue(char* path, struct Queue** queues) {
     if ((queues[i])->size < shortest) {
       shortest = (queues[i])->size;
       shortest_idx = i;
+    } else if ((queues[i])->size == shortest &&
+               (!(queues[i]->serving_cust) &&
+                ((queues[shortest_idx]->serving_cust)))) {
+      /*If two queues are the same length but one is not
+        serving a customer, give priority to the one not
+        serving a customer*/
+      shortest = (queues[i])->size;
+      shortest_idx = i;
     }
   }
   log_event(logfile, "Inserting new client into queue");

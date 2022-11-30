@@ -9,6 +9,7 @@ struct Queue createQueue() {
   queue.size = 0;
   queue.front = 0;
   queue.rear = -1;
+  queue.serving_cust = false;
   return queue;
 }
 
@@ -38,7 +39,9 @@ char* removeData(struct Queue* queue) {
     }
 
     queue->size--;
+    queue->serving_cust = true;
     return c;
   }
+  queue->serving_cust = false;
   return NULL;
 }

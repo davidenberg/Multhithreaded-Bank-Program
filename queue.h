@@ -24,6 +24,7 @@ typedef struct Queue {
   int size;
   int front;
   int rear;
+  bool serving_cust;
   char** q;
 } Queue;
 
