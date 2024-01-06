@@ -1,4 +1,8 @@
-# Sovellusohjelmointi assignment 2
+# Multithreaded bank program
+
+Created as part of a school course, this project consist of a multithreaded server-client
+setup that allows users to check, withdraw, deposit and transfer funds between accounts.
+Tested as working on Debian 11.
 
 ## Installation
 
